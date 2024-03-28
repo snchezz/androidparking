@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardando Coordenadas y Abriendo Google Maps</title>
+<!-- Añadiendo Materialize CSS -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<style>
+/* Estilos CSS personalizados */
+#map {
+  width: 100%;
+  height: calc(100vh - 100px); /* Ajuste de altura para que quede arriba y los botones abajo */
+}
+
+.btn-container {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+/* Estilos para los botones */
+.btn-floating.red {
+  background-color: #f44336;
+}
+.btn-floating.blue {
+  background-color: #2196F3;
+}
+.btn-floating.green {
+  background-color: #4CAF50;
+}
+</style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+
+<div class="btn-container">
+  <button class="btn-floating btn-large waves-effect waves-light red" onclick="clearLocation()"><i class="material-icons">delete</i></button>
+  <button class="btn-floating btn-large waves-effect waves-light blue" onclick="openGoogleMaps()"><i class="material-icons">location_on</i></button>
+  <button class="btn-floating btn-large waves-effect waves-light green" onclick="saveLocation()"><i class="material-icons">save</i></button>
+</div>
+
+<!-- Añadiendo Materialize JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+// JavaScript
+let latitude = null;
+let longitude = null;
+
+function saveLocation() {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+    showMap(latitude, longitude);
+  });
+}
+
+function showMap(latitude, longitude) {
+  const mapDiv = document.getElementById('map');
+  mapDiv.innerHTML = `<iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://maps.google.com/maps?q=${latitude},${longitude}&output=embed"></iframe>`;
+}
+
+function openGoogleMaps() {
+  if (latitude !== null && longitude !== null) {
+    window.open(`https://www.google.com/maps?q=${latitude},${longitude}`, '_blank');
+  } else {
+    alert('Primero guarda una ubicación.');
+  }
+}
+
+function clearLocation() {
+  latitude = null;
+  longitude = null;
+  const mapDiv = document.getElementById('map');
+  mapDiv.innerHTML = ''; // Limpiando el contenido del mapa
+}
+
+</script>
+
+</body>
+</html>
